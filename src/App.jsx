@@ -1,3 +1,4 @@
+import { AnimatePresence } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 import {
   Check,
@@ -353,14 +354,17 @@ function TodoCard({ session, onSignOut }) {
         ) : filteredTodos.length === 0 ? (
           <div className="empty-state">No tasks in this view.</div>
         ) : (
-          <div className="todo-list">
-            {filteredTodos.map((todo) => (
-              <motion.div
+           <div className="todo-list">
+            <AnimatePresence>
+              {filteredTodos.map((todo) => (
+                <motion.div
                 key={todo.id}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -10, scale: 0.98 }}
+                transition={{ duration: 0.2 }}
                 className="todo-item"
-              >
+              >  
                 <button
                   onClick={() => toggleTodo(todo.id, todo.completed)}
                   className={todo.completed ? "check-button checked" : "check-button"}
