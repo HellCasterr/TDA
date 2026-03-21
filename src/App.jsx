@@ -1,4 +1,4 @@
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 import {
   Check,
@@ -9,7 +9,6 @@ import {
   RefreshCw,
   Trash2,
 } from "lucide-react";
-import { motion } from "framer-motion";
 import { supabase } from "./lib/supabase";
 
 export default function App() {
@@ -157,7 +156,7 @@ function AuthCard({ email, setEmail, sendMagicLink, sendingLink, authMessage }) 
               if (e.key === "Enter") sendMagicLink();
             }}
           />
- <button className="primary-button" onClick={sendMagicLink} disabled={sendingLink}>
+          <button className="primary-button" onClick={sendMagicLink} disabled={sendingLink}>
             {sendingLink ? <Loader2 className="spin" size={16} /> : <Mail size={16} />}
             <span>Send Magic Link</span>
           </button>
@@ -347,6 +346,7 @@ function TodoCard({ session, onSignOut }) {
             </button>
           </div>
         </div>
+
         {errorMessage ? <div className="error-box">{errorMessage}</div> : null}
 
         {loading ? (
@@ -354,38 +354,41 @@ function TodoCard({ session, onSignOut }) {
         ) : filteredTodos.length === 0 ? (
           <div className="empty-state">No tasks in this view.</div>
         ) : (
-           <div className="todo-list">
+          <div className="todo-list">
             <AnimatePresence>
               {filteredTodos.map((todo) => (
                 <motion.div
-                key={todo.id}
-                initial={{ opacity: 0, y: 10, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -10, scale: 0.98 }}
-                transition={{ duration: 0.2 }}
-                className="todo-item"
-              >  
-                <button
-                  onClick={() => toggleTodo(todo.id, todo.completed)}
-                  className={todo.completed ? "check-button checked" : "check-button"}
-                  aria-label={todo.completed ? "Mark as incomplete" : "Mark as complete"}
+                  key={todo.id}
+                  initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -10, scale: 0.98 }}
+                  transition={{ duration: 0.2 }}
+                  className="todo-item"
                 >
-                  {todo.completed ? <Check size={14} /> : null}
-                </button>
+                  <button
+                    onClick={() => toggleTodo(todo.id, todo.completed)}
+                    className={todo.completed ? "check-button checked" : "check-button"}
+                    aria-label={todo.completed ? "Mark as incomplete" : "Mark as complete"}
+                  >
+                    {todo.completed ? <Check size={14} /> : null}
+                  </button>
 
-                <div className="todo-text-wrap">
-                  <p className={todo.completed ? "todo-text completed" : "todo-text"}>{todo.text}</p>
-                </div>
+                  <div className="todo-text-wrap">
+                    <p className={todo.completed ? "todo-text completed" : "todo-text"}>
+                      {todo.text}
+                    </p>
+                  </div>
 
-                <button
-                  className="icon-button"
-                  onClick={() => deleteTodo(todo.id)}
-                  aria-label="Delete task"
-                >
-                  <Trash2 size={16} />
-                </button>
-              </motion.div>
-            ))}
+                  <button
+                    className="icon-button"
+                    onClick={() => deleteTodo(todo.id)}
+                    aria-label="Delete task"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
         )}
       </div>
